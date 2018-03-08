@@ -7,9 +7,12 @@ app.on('ready', function () {
         height: 600
     });
 
+    // Hide Menu
+    win.setMenu(null);
 
+    // Load page
     win.loadURL(`file://${__dirname}/downloadgif/download.html`);
 
     // Open the DevTools.
-    // win.webContents.openDevTools();
+    win.webContents.openDevTools();
 });

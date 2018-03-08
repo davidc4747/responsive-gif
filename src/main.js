@@ -8,5 +8,8 @@ app.on('ready', function () {
     });
 
 
-    win.loadURL(`file://${__dirname}/index.html`);
+    win.loadURL(`file://${__dirname}/downloadgif/download.html`);
+
+    // Open the DevTools.
+    // win.webContents.openDevTools();
 });

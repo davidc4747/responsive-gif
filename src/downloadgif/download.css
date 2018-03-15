@@ -12,3 +12,17 @@ ul {
     padding: 0;
     border: none;
 }
+
+
+
+/*===============*\
+    #DownloadPage
+\*===============*/
+
+.preview {
+    width: 200px;
+}
+
+.testing {
+    background-color: #c8c8c8;
+}

@@ -5,7 +5,7 @@ let curWindow = remote.getCurrentWindow();
 
 const duration = 1;
 const repeatDelay = 1;
-const fps = 60;
+const fps = 120;
 const totalFrames = (duration + repeatDelay) * fps;
 let currentFrame = 0;
 
@@ -51,6 +51,7 @@ ipcRenderer.on('next-frame', captureNextFrame);
 
 function captureNextFrame() {
     if (currentFrame === totalFrames) {
+        curWindow.getParentWindow().send('end-animation');
         curWindow.close();
     }
     else {

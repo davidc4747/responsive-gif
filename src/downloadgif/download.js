@@ -20,14 +20,10 @@ createBtn.addEventListener('click', function () {
         width: 800,
         height: 450,
         show: false,
-
-        // alwaysOnTop: true, 
-        frame: false,
-        center: true,
     });
 
     gifWindow.once('ready-to-show', function () {
-        gifWindow.show();
+        // gifWindow.show();
 
         // Pass url to 'gifwindow'
         let siteUrl = document.querySelector('.site-url');
@@ -47,7 +43,31 @@ createBtn.addEventListener('click', function () {
     #Capture Image
 \*======================*/
 
+// TODO: try the other one
+
+// Gif Creator
+let gif = new GIF({
+    workers: 2,
+    quality: 10
+});
+
+// Get the canvas
+let canvas = document.querySelector(".testing");
+let context = canvas.getContext("2d");
+
+gif.addFrame(canvas, { delay: 17 });
+gif.on('finished', function (blob) {
+    let downloadBtn = document.querySelector('.download');
+    downloadBtn.addEventListener('click', function () {
+        console.log('Download click.');
+        window.open(URL.createObjectURL(blob));
+    });
+});
+
+
+
 ipcRenderer.on('capture-window', function (event, args) {
+
     // Stap shot the gif window
     gifWindow.capturePage(function (image) {
         console.log('Capture image: ', image);
@@ -55,10 +75,24 @@ ipcRenderer.on('capture-window', function (event, args) {
         let imgElem = new Image();
         imgElem.src = image.toDataURL();
 
-        let previewWindow = document.querySelector('.preview');
-        previewWindow.appendChild(imgElem);
+        // let previewWindow = document.querySelector('.preview');
+        // previewWindow.appendChild(imgElem);
 
-        // Get the next frame
-        gifWindow.webContents.send('next-frame');
+        // on image load
+        imgElem.onload = function () {
+            context.drawImage(imgElem, 0, 0, canvas.width, canvas.height);
+            // gif.addFrame(imgElem);
+            // gif.addFrame(context, { copy: true });
+
+            // Get the next frame
+            gifWindow.webContents.send('next-frame');
+        };
+
     });
+});
+
+
+ipcRenderer.on('end-animation', function (event, args) {
+    console.log('Animation Done');
+    gif.render();
 });

@@ -3,7 +3,7 @@ const { app, BrowserWindow } = require('electron');
 let win;
 app.on('ready', function () {
     win = new BrowserWindow({
-        width: 800,
+        width: 850,
         height: 600
     });
 
@@ -14,5 +14,5 @@ app.on('ready', function () {
     win.loadURL(`file://${__dirname}/downloadgif/download.html`);
 
     // Open the DevTools.
-    // win.webContents.openDevTools();
+    win.webContents.openDevTools();
 });

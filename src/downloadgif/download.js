@@ -43,28 +43,21 @@ createBtn.addEventListener('click', function () {
     #Capture Image
 \*======================*/
 
-// TODO: try the other one
+// problem: the gif looping doesn't look smooth.
+// problem: losing quality because of the gifwindow scaling
+// problem: I'm losing quality by jump through so many hoops
+// problem: WAIT.. this thing is still slow as hell...
+// problem: you can't run it twice
 
 // Gif Creator
-let gif = new GIF({
-    workers: 2,
-    quality: 10
-});
+var encoder = new GIFEncoder();
+encoder.setRepeat(0);
+encoder.setDelay(100);// TODO: this should be a setting
+encoder.start();
 
 // Get the canvas
 let canvas = document.querySelector(".testing");
 let context = canvas.getContext("2d");
-
-gif.addFrame(canvas, { delay: 17 });
-gif.on('finished', function (blob) {
-    let downloadBtn = document.querySelector('.download');
-    downloadBtn.addEventListener('click', function () {
-        console.log('Download click.');
-        window.open(URL.createObjectURL(blob));
-    });
-});
-
-
 
 ipcRenderer.on('capture-window', function (event, args) {
 
@@ -80,10 +73,12 @@ ipcRenderer.on('capture-window', function (event, args) {
 
         // on image load
         imgElem.onload = function () {
+            // Draw the image on the main canvas
             context.drawImage(imgElem, 0, 0, canvas.width, canvas.height);
-            // gif.addFrame(imgElem);
-            // gif.addFrame(context, { copy: true });
 
+            // Capture the image
+            encoder.addFrame(context);
+            
             // Get the next frame
             gifWindow.webContents.send('next-frame');
         };
@@ -94,5 +89,6 @@ ipcRenderer.on('capture-window', function (event, args) {
 
 ipcRenderer.on('end-animation', function (event, args) {
     console.log('Animation Done');
-    gif.render();
+    encoder.finish();
+    encoder.download("download.gif");
 });

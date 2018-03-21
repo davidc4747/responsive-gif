@@ -5,8 +5,9 @@ let curWindow = remote.getCurrentWindow();
 
 const duration = 1;
 const repeatDelay = 1;
-const fps = 120;
+const fps = 24;
 const totalFrames = (duration + repeatDelay) * fps;
+const totalDuration = (duration + repeatDelay) * 2;
 let currentFrame = 0;
 
 
@@ -55,7 +56,7 @@ function captureNextFrame() {
         curWindow.close();
     }
     else {
-        tween.pause(currentFrame / totalFrames);
+        tween.pause((currentFrame / totalFrames) * totalDuration);
         curWindow.getParentWindow().send('capture-window');
         currentFrame++;
     }

@@ -15,18 +15,19 @@
             <h1>Responsive Gifss</h1>
 
             <label for="site-url">Site Url: </label>
-            <input type="text" class="site-url" name="site-url" value="https://s.codepen.io/tylersticka/debug/daefb60e7a6962c0f36f4464321e2e7a"/>
+            <input type="text" class="site-url" name="site-url" value="https://s.codepen.io/tylersticka/debug/daefb60e7a6962c0f36f4464321e2e7a"
+            />
 
             <button class="create">Create Gif</button>
-            <button class="download">download Gif</button>
         </section>
-        
-        <canvas class="testing" width="800" height="450"></canvas>
 
+        <canvas class="testing" width="800" height="450"></canvas>
         <div class="preview"></div>
 
 
-        <script src="../../libs/gif.js"></script>
+        <script type="text/javascript" src="../../libs/LZWEncoder.js"></script>
+        <script type="text/javascript" src="../../libs/NeuQuant.js"></script>
+        <script type="text/javascript" src="../../libs/GIFEncoder.js"></script>
         <script src="./download.js"></script>
     </body>
 

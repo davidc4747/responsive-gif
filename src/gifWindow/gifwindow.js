@@ -42,6 +42,11 @@ const tween = TweenMax.fromTo(siteFrame, duration, {
     #Creating the gif
 \*======================*/
 
+ipcRenderer.on('load-siteUrl', function(event, arg) {
+    // Get the site url
+    siteFrame.src = arg.siteUrl;
+});
+
 ipcRenderer.on('create-gif', function (event, arg) {
     // Get the site url
     siteFrame.src = arg.siteUrl;

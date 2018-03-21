@@ -15,17 +15,13 @@ let gifWindow = new BrowserWindow({
     parent: remote.getCurrentWindow(),
 
     backgroundColor: '#0F1C3F',
-    width: 800,
-    height: 450,
+    width: 1600,
+    height: 900,
     show: false,
 });
 
 // Hide Menu
 gifWindow.setMenu(null);
-
-gifWindow.once('ready-to-show', function () {
-    gifWindow.show();
-});
 
 // Load page
 // TODO: open the other window using 'puppeteer' or 'phantomjs' [DC]
@@ -66,7 +62,7 @@ siteUrlElem.addEventListener("input", function (event) {
     });
 });
 
-siteUrlElem.value = "https://s.codepen.io/tylersticka/debug/daefb60e7a6962c0f36f4464321e2e7a";
+// siteUrlElem.value = "http://davidchung.net/";
 
 
 
@@ -85,7 +81,8 @@ siteUrlElem.value = "https://s.codepen.io/tylersticka/debug/daefb60e7a6962c0f36f
 // Gif Creator
 var encoder = new GIFEncoder();
 encoder.setRepeat(0);
-encoder.setDelay(100);// TODO: this should be a setting
+encoder.setDelay(46);// TODO: this should be a setting
+// encoder.setFrameRate(60);// TODO: this should be a setting
 encoder.start();
 
 // Get the canvas

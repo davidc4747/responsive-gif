@@ -5,7 +5,7 @@ let curWindow = remote.getCurrentWindow();
 
 const duration = 1;
 const repeatDelay = 1;
-const fps = 24;
+const fps = 60;
 const totalFrames = (duration + repeatDelay) * fps;
 const totalDuration = (duration + repeatDelay) * 2;
 let currentFrame = 0;
@@ -37,7 +37,6 @@ const tween = TweenMax.fromTo(siteFrame, duration, {
 
 
 
-
 /*======================*\
     #Creating the gif
 \*======================*/
@@ -50,13 +49,15 @@ ipcRenderer.on('load-siteUrl', function(event, arg) {
 ipcRenderer.on('create-gif', function (event, arg) {
     // Get the site url
     siteFrame.src = arg.siteUrl;
-    siteFrame.addEventListener("load", captureNextFrame);
+    siteFrame.addEventListener("load", function(){
+        setTimeout(captureNextFrame, 1000);// delay by one second to allow the page to load it's contents [DC]
+    });
 });
 
 ipcRenderer.on('next-frame', captureNextFrame);
 
 function captureNextFrame() {
-    if (currentFrame === totalFrames) {
+    if (currentFrame >= totalFrames) {
         curWindow.getParentWindow().send('end-animation');
         curWindow.close();
     }

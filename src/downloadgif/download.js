@@ -1,10 +1,13 @@
 const path = require('path');
-const { remote, ipcRenderer, nativeImage } = require('electron');
+const { remote, ipcRenderer } = require('electron');
 const BrowserWindow = remote.BrowserWindow;
 
 
-
-
+// TODO:  for controlling sizing, timing, easing and background
+// TODO:  Google's Puppeteer for screenshots??
+// TODO:  ~~Record a Gif of any GreenSock animation?
+// TODO: Error if the button is pressed twice
+// TODO: Should I use react for this??
 
 /*======================*\
     #Create gifWindow
@@ -14,9 +17,9 @@ const BrowserWindow = remote.BrowserWindow;
 let gifWindow = new BrowserWindow({
     parent: remote.getCurrentWindow(),
 
-    backgroundColor: '#0F1C3F',
-    width: 1600,
-    height: 900,
+    // backgroundColor: settings.backgroundColor,
+    // width: settings.canvas.width,
+    // height: settings.canvas.height,
     show: false,
 });
 
@@ -28,6 +31,23 @@ gifWindow.setMenu(null);
 gifWindow.loadURL(path.resolve(__dirname, '../gifWindow/gifwindow.html'));
 
 
+/*======================*\
+    #Settings Events
+\*======================*/
+
+document.querySelector('.background-color').addEventListener("input", function () {
+    updateSettings();
+});
+
+function updateSettings() {
+    ipcRenderer.send('update-settings', { backgroundColor: '#f00' })
+}
+
+ipcRenderer.on('settings-changed', function (event, settings) {
+    console.log("Settings CHANGED!!!!", settings);
+});
+
+function updateView(settings) { }
 
 
 
@@ -45,7 +65,7 @@ createBtn.addEventListener('click', function () {
 });
 
 siteUrlElem.addEventListener("input", function (event) {
-    console.log("input change!");
+    updateSettings();
     gifWindow.webContents.send('load-siteUrl', { 'siteUrl': siteUrlElem.value });
 
     // Stap shot the gif window
@@ -62,8 +82,6 @@ siteUrlElem.addEventListener("input", function (event) {
     });
 });
 
-// siteUrlElem.value = "http://davidchung.net/";
-
 
 
 
@@ -71,12 +89,6 @@ siteUrlElem.addEventListener("input", function (event) {
 /*======================*\
     #Capture Image
 \*======================*/
-
-// problem: the gif looping doesn't look smooth.
-// problem: losing quality because of the gifwindow scaling
-// problem: I'm losing quality by jump through so many hoops
-// problem: WAIT.. this thing is still slow as hell...
-// problem: you can't run it twice
 
 // Gif Creator
 var encoder = new GIFEncoder();

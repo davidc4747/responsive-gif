@@ -14,10 +14,10 @@ app.on('ready', function () {
         height: 900,
         show: false,
     });
-    
+
     // Hide Menu
     gifWindow.setMenu(null);
-    
+
     // Load page
     // TODO: open the other window using 'puppeteer' or 'phantomjs' [DC]
     gifWindow.loadURL(`file://${__dirname}/gifWindow/gifwindow.html`);
@@ -58,7 +58,9 @@ app.on('ready', function () {
     });
 
 
-
+    /* Close the app */
+    mainWindow.on('closed', () => { app.quit() });
+    gifWindow.on('closed', () => { app.quit() });
 });
 
 
@@ -77,7 +79,7 @@ let settings = {
     siteUrl: 'http://davidchung.net',
     fps: 45,
     totalFrames: 80,//(settings.duration + settings.repeatDelay) / 1000 * settings.fps,
-    
+
     duration: 1000,
     repeatDelay: 1000,
     easing: 'Power2.easeInOut',
@@ -106,10 +108,10 @@ ipcMain.on("update-settings", function (event, newSettings) {
     #Capturing Animation
 \*=========================*/
 
-ipcMain.on('create-gif', function() {
+ipcMain.on('create-gif', function () {
     gifWindow.webContents.send('create-gif');
 });
 
-ipcMain.on('image-captured', function(e, args) {
+ipcMain.on('image-captured', function (e, args) {
     mainWindow.webContents.send('image-captured', args);
 });

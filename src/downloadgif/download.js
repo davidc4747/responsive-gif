@@ -1,7 +1,6 @@
 const { remote, ipcRenderer } = require('electron');
 const BrowserWindow = remote.BrowserWindow;
 
-// TODO: Closing should end the whole program
 // TODO: style the damn thing..
 // TODO: disable download button if gifWindow is not ready
 

@@ -1,6 +1,6 @@
 const { ipcRenderer, remote } = require('electron');
 let curWindow = remote.getCurrentWindow();
-curWindow.openDevTools();
+// curWindow.openDevTools();
 
 
 /*======================*\
@@ -15,6 +15,7 @@ const siteFrame = document.querySelector('iframe');
 let settings;
 let tween;
 
+let imageCount = 0;
 let totalFrames;
 let currentFrame = 0;
 let readyToCapture = false;// NOTE: never used [DC]
@@ -33,16 +34,15 @@ ipcRenderer.on('settings-changed', function (event, newSettings) {
     settings = newSettings;
 
     // Update window
-    totalFrames = (newSettings.duration + newSettings.repeatDelay) / 1000 * newSettings.fps;
+    totalFrames = newSettings.totalFrames;
     canvas.width = newSettings.canvas.width;
     canvas.height = newSettings.canvas.height;
-    // curWindow.setSize(newSettings.canvas.width, newSettings.canvas.height);
     siteFrame.src = newSettings.siteUrl;
     siteFrame.addEventListener("load", function () {
         setTimeout(function () { readyToCapture = true; }, 1000);// Delay by one second to allow the page to load it's contents [DC]
     });
 
-    // TODO: Update Animation
+    // Update Animation
     tween = TweenMax.fromTo(siteFrame, newSettings.duration / 1000, {
         width: 320
     },
@@ -72,10 +72,11 @@ ipcRenderer.on('create-gif', function (event, arg) {
 
 // Gif Creator
 let encoder = new GIFEncoder();
+encoder.setRepeat(0);
 
 function captureNextFrame() {
     if (currentFrame === 0) {
-        encoder.setRepeat(0);
+        tween.pause(0);
         // NOTE: The gif encoder plays back gifs a little to fast.
         //      Added a '2.75' modifier to slow it down [DC]
         encoder.setDelay((1000 / settings.fps) * 2.75);
@@ -83,8 +84,9 @@ function captureNextFrame() {
     }
 
     if (currentFrame >= totalFrames) {
-        console.log('Animation Complete!!');
+        // console.log('Animation Complete!!');
         currentFrame = 0;
+        imageCount = 0;
         encoder.finish();
         encoder.download("download.gif");
         // curWindow.close();
@@ -95,7 +97,7 @@ function captureNextFrame() {
 
         // Screenshot the window
         curWindow.capturePage(function (image) {
-            console.log('Capture image...');
+            // console.log('Capture image...');
 
             let imgElem = new Image();
             imgElem.src = image.toDataURL();
@@ -108,7 +110,9 @@ function captureNextFrame() {
                 context.drawImage(imgElem, 0, 0, canvas.width, canvas.height);
 
                 // Capture the image
+                imageCount++;
                 encoder.addFrame(context);
+                ipcRenderer.send('image-captured', { imageCount: imageCount, progress: currentFrame / Math.ceil(totalFrames) })
 
                 // Get the next frame
                 captureNextFrame();

@@ -1,10 +1,9 @@
 const { remote, ipcRenderer } = require('electron');
 const BrowserWindow = remote.BrowserWindow;
 
-// TODO: display preview as settings are changed
-// TODO: display progress bar as gif is downloaded
 // TODO: disable download button if gifWindow is not ready
-// TODO: Error if the button is pressed twice
+
+let tween;
 
 
 
@@ -20,8 +19,7 @@ let backgroundColorInput = document.querySelector('.background-color');
 
 
 siteUrlElem.addEventListener("input", function (event) {
-    updateSettings({ 'siteUrl': siteUrlElem.value });
-    // TODO: reload the preview
+    updateSettings({ siteUrl: siteUrlElem.value });
 });
 
 durationElem.addEventListener("input", function (event) {
@@ -43,16 +41,35 @@ backgroundColorInput.addEventListener("input", function (event) {
 
 
 function updateSettings(newSettings) {
-    ipcRenderer.send('update-settings', newSettings)
+    ipcRenderer.send('update-settings', newSettings);
 }
 
-ipcRenderer.on('settings-changed', function (event, settings) {
+ipcRenderer.on('settings-changed', function (event, newSettings) {
     console.log("Settings Changed..download.js");
-    siteUrlElem.value = settings.siteUrl;
-    durationElem.value = settings.duration;
-    repeatDelayElem.value = settings.repeatDelay;
-    easingElem.value = settings.easing;
-    backgroundColorInput.value = settings.backgroundColor;
+    siteUrlElem.value = newSettings.siteUrl;
+    durationElem.value = newSettings.duration;
+    repeatDelayElem.value = newSettings.repeatDelay;
+    easingElem.value = newSettings.easing;
+    backgroundColorInput.value = newSettings.backgroundColor;
+
+
+
+    // SetUp preview
+    let previewContainer = document.querySelector(".preview__container");
+    let previewFrame = document.querySelector(".preview__frame");
+    previewContainer.style.backgroundColor = newSettings.backgroundColor;
+    previewFrame.src = newSettings.siteUrl;
+    tween = TweenMax.fromTo(previewFrame, newSettings.duration / 1000, {
+        width: 320
+    },
+        {
+            width: 1600,
+            yoyo: true,
+            repeat: -1,
+            repeatDelay: newSettings.repeatDelay / 1000,
+            ease: EaseLookup.find(newSettings.easing),
+            // paused: true
+        });
 });
 
 
@@ -67,4 +84,13 @@ let createBtn = document.querySelector('.create');
 createBtn.addEventListener('click', function () {
     // TODO: request the animation
     ipcRenderer.send('create-gif');
+});
+
+
+
+
+ipcRenderer.on('image-captured', function (event, args) {
+    //{imgCount, progress}
+    let progressBar = document.querySelector(".progress");
+    progressBar.style.setProperty('--progress', args.progress);
 });

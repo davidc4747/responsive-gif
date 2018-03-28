@@ -28,10 +28,10 @@ app.on('ready', function () {
         #Main Window
     \*-------------------------*/
     mainWindow = new BrowserWindow({
-        x: 0,
-        y: 240,
-        width: 850,
-        height: 600
+        // x: 0,
+        // y: 240,
+        width: 900,
+        height: 700
     });
 
     // Hide Menu
@@ -41,7 +41,7 @@ app.on('ready', function () {
     mainWindow.loadURL(`file://${__dirname}/downloadgif/download.html`);
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
 
 
 
@@ -76,6 +76,7 @@ let settings = {
     },
     siteUrl: 'http://davidchung.net',
     fps: 45,
+    totalFrames: 80,//(settings.duration + settings.repeatDelay) / 1000 * settings.fps,
     
     duration: 1000,
     repeatDelay: 1000,
@@ -83,11 +84,14 @@ let settings = {
     backgroundColor: '#0F1C3F'
 };
 
-ipcMain.on("update-settings", function (event, args) {
+ipcMain.on("update-settings", function (event, newSettings) {
     // Update settings with new values
-    for (let prop in args) {
-        settings[prop] = args[prop];
+    for (let prop in newSettings) {
+        settings[prop] = newSettings[prop];
     }
+
+    // Calculated setting??  NOTE: Setting might be more than just settings at this point [DC]
+    settings.totalFrames = (settings.duration + settings.repeatDelay) / 1000 * settings.fps;
 
     console.log("New Settings", settings);
     mainWindow.webContents.send("settings-changed", settings);
@@ -104,4 +108,8 @@ ipcMain.on("update-settings", function (event, args) {
 
 ipcMain.on('create-gif', function() {
     gifWindow.webContents.send('create-gif');
+});
+
+ipcMain.on('image-captured', function(e, args) {
+    mainWindow.webContents.send('image-captured', args);
 });

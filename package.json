@@ -4,12 +4,14 @@
     "description": "",
     "main": "src/main.js",
     "scripts": {
-        "start": "electron src/main.js"
+        "start": "electron .",
+        "pack": "electron-packager . 'ResponsiveGif' --out ./package --overwrite"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "devDependencies": {
-        "electron": "^1.8.2"
+        "electron": "^1.8.2",
+        "electron-packager": "^11.2.0"
     }
 }

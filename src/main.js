@@ -31,7 +31,8 @@ app.on('ready', function () {
         // x: 0,
         // y: 240,
         width: 900,
-        height: 700
+        height: 700,
+        show: false
     });
 
     // Hide Menu
@@ -42,6 +43,10 @@ app.on('ready', function () {
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools();
+
+    mainWindow.once('ready-to-show', function () {
+        mainWindow.show();
+    });
 
 
 

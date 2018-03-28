@@ -1,24 +1,33 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 
+/*======================*\
+    #Start App
+\*======================*/
 
-/* Default Settings */
-let settings = {
-    canvas: {
-        width: 1600,
-        height: 900
-    },
-    duration: 8000,
-    repeatDelay: 1000,
-    easing: 'Power2.easeInOut',
-    backgroundColor: '#0F1C3F'
-};
-
-
-
-/* Open Main Window */
-let win;
+let mainWindow, gifWindow;
 app.on('ready', function () {
-    win = new BrowserWindow({
+    /*-------------------------*\
+        #Gif Window
+    \*-------------------------*/
+    gifWindow = new BrowserWindow({
+        width: 1600,
+        height: 900,
+        show: false,
+    });
+    
+    // Hide Menu
+    gifWindow.setMenu(null);
+    
+    // Load page
+    // TODO: open the other window using 'puppeteer' or 'phantomjs' [DC]
+    gifWindow.loadURL(`file://${__dirname}/gifWindow/gifwindow.html`);
+
+
+
+    /*-------------------------*\
+        #Main Window
+    \*-------------------------*/
+    mainWindow = new BrowserWindow({
         x: 0,
         y: 240,
         width: 850,
@@ -26,18 +35,73 @@ app.on('ready', function () {
     });
 
     // Hide Menu
-    win.setMenu(null);
+    mainWindow.setMenu(null);
 
     // Load page
-    win.loadURL(`file://${__dirname}/downloadgif/download.html`);
+    mainWindow.loadURL(`file://${__dirname}/downloadgif/download.html`);
 
     // Open the DevTools.
-    win.webContents.openDevTools();
-    win.webContents.on('did-finish-load', function () {
-        win.webContents.send("settings-changed", settings);
+    mainWindow.webContents.openDevTools();
+
+
+
+    /*-------------------------*\
+        #Send Settings
+    \*-------------------------*/
+
+    mainWindow.webContents.on('did-finish-load', function () {
+        mainWindow.webContents.send("settings-changed", settings);
     });
+
+    gifWindow.webContents.on('did-finish-load', function () {
+        gifWindow.webContents.send("settings-changed", settings);
+    });
+
+
+
 });
 
+
+
+
+
+/*======================*\
+    #Manage Settings
+\*======================*/
+
+let settings = {
+    canvas: {
+        width: 800,
+        height: 450
+    },
+    siteUrl: 'http://davidchung.net',
+    fps: 45,
+    
+    duration: 1000,
+    repeatDelay: 1000,
+    easing: 'Power2.easeInOut',
+    backgroundColor: '#0F1C3F'
+};
+
 ipcMain.on("update-settings", function (event, args) {
-    console.log("updating settings", args);
+    // Update settings with new values
+    for (let prop in args) {
+        settings[prop] = args[prop];
+    }
+
+    console.log("New Settings", settings);
+    mainWindow.webContents.send("settings-changed", settings);
+    gifWindow.webContents.send("settings-changed", settings);
+});
+
+
+
+
+
+/*=========================*\
+    #Capturing Animation
+\*=========================*/
+
+ipcMain.on('create-gif', function() {
+    gifWindow.webContents.send('create-gif');
 });

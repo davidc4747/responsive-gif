@@ -9,7 +9,7 @@ Create an aimated gif of your webpage responding to different screen widths.
 ## Developing
 
 ### Built With
-JavaScript & Electron
+JavaScript & Electron & [jsGif](https://github.com/antimatter15/jsgif)
 
 ### Prerequisites
 What is needed to set up the dev environment:  

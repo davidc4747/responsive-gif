@@ -1,7 +1,7 @@
 const { remote, ipcRenderer } = require('electron');
 const BrowserWindow = remote.BrowserWindow;
 
-// TODO: Fix the annoying input value thingy
+// TODO: Closing should end the whole program
 // TODO: style the damn thing..
 // TODO: disable download button if gifWindow is not ready
 
@@ -41,9 +41,13 @@ backgroundColorInput.addEventListener("input", function (event) {
 });
 
 
-
+let timeout = null;
 function updateSettings(newSettings) {
-    ipcRenderer.send('update-settings', newSettings);
+    // Wait for user to finish typing
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+        ipcRenderer.send('update-settings', newSettings);
+    }, 400);
 }
 
 ipcRenderer.on('settings-changed', function (event, newSettings) {

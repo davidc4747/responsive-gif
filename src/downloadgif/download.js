@@ -1,6 +1,8 @@
 const { remote, ipcRenderer } = require('electron');
 const BrowserWindow = remote.BrowserWindow;
 
+// TODO: Fix the annoying input value thingy
+// TODO: style the damn thing..
 // TODO: disable download button if gifWindow is not ready
 
 let tween;
@@ -82,15 +84,25 @@ ipcRenderer.on('settings-changed', function (event, newSettings) {
 
 let createBtn = document.querySelector('.create');
 createBtn.addEventListener('click', function () {
-    // TODO: request the animation
     ipcRenderer.send('create-gif');
+});
+
+let settingsVis = true;
+let toggleSettingsBtn = document.querySelector('.toggle-settings');
+toggleSettingsBtn.addEventListener('click', function () {
+    settingsVis = !settingsVis;
+    document.querySelector(".settings").style.setProperty("display", (settingsVis) ? "block" : "none");
 });
 
 
 
 
+/*======================*\
+    #ProgressBar
+\*======================*/
+
 ipcRenderer.on('image-captured', function (event, args) {
-    //{imgCount, progress}
+    // args = {imgCount, progress}
     let progressBar = document.querySelector(".progress");
     progressBar.style.setProperty('--progress', args.progress);
 });

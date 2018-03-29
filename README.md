@@ -6,7 +6,7 @@ Create an aimated gif of your webpage responding to different screen widths.
 ## Demo
 
 <!-- ![Demo](demos/demo2.gif) -->
-<img src="demos/demo2.gif" alt="Demo" width="700">
+<img src="demos/demo3_1.gif" alt="Demo" width="700">
 
 ## Example Output
 
@@ -23,7 +23,7 @@ npm install
 npm run pack
 
 # A package of the project will be created inside the "package/" folder
-# An executable file for your operating system fill be inside
+# An executable file for your operating system will be inside
 
 ```
 

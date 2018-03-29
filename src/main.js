@@ -22,14 +22,17 @@ app.on('ready', function () {
     // TODO: open the other window using 'puppeteer' or 'phantomjs' [DC]
     gifWindow.loadURL(`file://${__dirname}/gifWindow/gifwindow.html`);
 
+    // Open the DevTools.
+    // gifWindow.webContents.openDevTools();
+
 
 
     /*-------------------------*\
         #Main Window
     \*-------------------------*/
     mainWindow = new BrowserWindow({
-        x: 16,
-        y: 240,
+        // x: 16,
+        // y: 240,
         width: 1150,
         height: 600,
         show: false

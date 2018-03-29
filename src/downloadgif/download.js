@@ -2,7 +2,7 @@ const { remote, ipcRenderer } = require('electron');
 const BrowserWindow = remote.BrowserWindow;
 let curWindow = remote.getCurrentWindow();
 
-// TODO: style the damn thing..
+// TODO: disable button while downloading
 // TODO: disable download button if gifWindow is not ready
 
 let tween;
@@ -86,9 +86,23 @@ ipcRenderer.on('settings-changed', function (event, newSettings) {
     #Window Events
 \*======================*/
 
+let isDownloading = false;
+
 let createBtn = document.querySelector('.js-create-btn');
 createBtn.addEventListener('click', function () {
-    ipcRenderer.send('create-gif');
+    if (!isDownloading) {
+        // Request the gif be created
+        ipcRenderer.send('create-gif');
+
+        // pause the animation
+        tween.pause(0);
+
+        // Adjust display on Download button
+        isDownloading = true;
+        createBtn.disabled = true;
+        createBtn.innerHTML = "Processing (0%)";
+        createBtn.classList.add("btn--create--downloading");
+    }
 });
 
 
@@ -99,6 +113,24 @@ createBtn.addEventListener('click', function () {
 \*======================*/
 
 ipcRenderer.on('image-captured', function (event, args) {
+    if (isDownloading) {
+        // if download finished
+        if (args.progress >= 1) {
+            // Resume playing the animation
+            tween.play(0);
+
+            // Reset button display
+            isDownloading = false;
+            createBtn.disabled = false;
+            createBtn.innerHTML = "Create Gif";
+            createBtn.classList.remove("btn--create--downloading");
+        }
+        else {
+            createBtn.innerHTML = `Processing (${(args.progress * 100).toFixed(0)}%)`;
+        }
+
+    }
+
     // args = {imgCount, progress}
     let progressBar = document.querySelector(".progress");
     progressBar.style.setProperty('--progress', args.progress);

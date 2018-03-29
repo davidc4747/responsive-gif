@@ -11,38 +11,45 @@
     </head>
 
     <body>
-        <h1>Responsive Gifss</h1>
-        
-        <section>
-            <label for="site-url">Site Url: </label>
-            <input type="text" class="site-url" name="site-url" value="" />
 
-            <button class="create">Create Gif</button>
-            <button class="toggle-settings">Toggle Settings</button>
-        </section>
-
-        <section class="settings">
-            <label for="">Duration(ms): </label>
-            <input class="duration" name="" type="text" placeholder="Duration" value="">
-            
-            <label for="">Repeat Delay(ms): </label>
-            <input class="repeat-delay" name="" type="text" placeholder="Repeat Delay" value="">
-            
-            <label for="">Easing: </label>
-            <input class="easing" name="" type="text" placeholder="Easing" value="">
-            
-            <label for="">Background Color: </label>
-            <input class="background-color" name="" type="text" placeholder="BackGround Color" value="">            
-        </section>
-
-        <section class="progress"></section>
-
-        <section class="preview">
-            <div class="preview__container">
-                <iframe class="preview__frame" src=""  scrolling="no" frameborder="0"></iframe>
+        <aside class="settings">
+            <div class="settings__group">
+                <label class="settings__lbl site-url-label" for="site-url">Site Url: </label>
+                <input class="settings__input site-url" name="site-url" type="text" value="" />
             </div>
-        </section>
-  
+            
+            <div class="settings__group">
+                <label class="settings__lbl" for="">Duration(ms): </label>
+                <input class="settings__input duration" name="" type="text" placeholder="Duration" value="">
+            </div>
+
+            <div class="settings__group">
+                <label class="settings__lbl" for="">Repeat Delay(ms): </label>
+                <input class="settings__input repeat-delay" name="" type="text" placeholder="Repeat Delay" value="">
+            </div>
+
+            <div class="settings__group">
+                <label class="settings__lbl" for="">Easing: </label>
+                <input class="settings__input easing" name="" type="text" placeholder="Easing" value="">
+            </div>
+
+            <div class="settings__group">
+                <label class="settings__lbl" for="">Background Color: </label>
+                <input class="settings__input background-color" name="" type="text" placeholder="BackGround Color" value="">
+            </div>
+
+            <button class="btn btn--create js-create-btn">Create Gif</button>
+
+            <div class="progress"></div>
+        </aside>
+
+        <main class="preview">
+            <div class="preview__container">
+                <iframe class="preview__frame" src="" scrolling="no" frameborder="0"></iframe>
+            </div>
+        </main>
+
+
 
 
         <!-- Scripts -->

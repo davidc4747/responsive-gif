@@ -2,7 +2,7 @@ const fs = require('fs');
 const { ipcRenderer, remote } = require('electron');
 const { dialog } = remote;
 let curWindow = remote.getCurrentWindow();
-curWindow.openDevTools();
+// curWindow.openDevTools();
 
 
 /*======================*\

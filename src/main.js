@@ -28,10 +28,10 @@ app.on('ready', function () {
         #Main Window
     \*-------------------------*/
     mainWindow = new BrowserWindow({
-        x: 0,
+        x: 16,
         y: 240,
-        width: 900,
-        height: 700,
+        width: 1150,
+        height: 600,
         show: false
     });
 
@@ -42,7 +42,7 @@ app.on('ready', function () {
     mainWindow.loadURL(`file://${__dirname}/downloadgif/download.html`);
 
     // Open the DevTools.
-    // mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
 
     mainWindow.once('ready-to-show', function () {
         mainWindow.show();

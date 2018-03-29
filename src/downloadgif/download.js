@@ -1,5 +1,6 @@
 const { remote, ipcRenderer } = require('electron');
 const BrowserWindow = remote.BrowserWindow;
+let curWindow = remote.getCurrentWindow();
 
 // TODO: style the damn thing..
 // TODO: disable download button if gifWindow is not ready
@@ -85,16 +86,9 @@ ipcRenderer.on('settings-changed', function (event, newSettings) {
     #Window Events
 \*======================*/
 
-let createBtn = document.querySelector('.create');
+let createBtn = document.querySelector('.js-create-btn');
 createBtn.addEventListener('click', function () {
     ipcRenderer.send('create-gif');
-});
-
-let settingsVis = true;
-let toggleSettingsBtn = document.querySelector('.toggle-settings');
-toggleSettingsBtn.addEventListener('click', function () {
-    settingsVis = !settingsVis;
-    document.querySelector(".settings").style.setProperty("display", (settingsVis) ? "block" : "none");
 });
 
 

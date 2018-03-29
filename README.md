@@ -5,12 +5,14 @@ Create an aimated gif of your webpage responding to different screen widths.
 
 ## Demo
 
-![Demo](demos/demo2.gif)
+<!-- ![Demo](demos/demo2.gif) -->
+<img src="demos/demo2.gif" alt="Demo" width="700">
 
 ## Example Output
 
-![Example1](demos/ex1.gif)
-![Example2](demos/ex2.gif)
+<img src="demos/ex1.gif" alt="Example1" width="300">
+<img src="demos/ex2.gif" alt="Example2" width="300">  
+
 
 ## Installation
 

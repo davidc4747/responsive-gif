@@ -1,6 +1,8 @@
+const fs = require('fs');
 const { ipcRenderer, remote } = require('electron');
+const { dialog } = remote;
 let curWindow = remote.getCurrentWindow();
-// curWindow.openDevTools();
+curWindow.openDevTools();
 
 
 /*======================*\
@@ -78,8 +80,8 @@ function captureNextFrame() {
     if (currentFrame === 0) {
         tween.pause(0);
         // NOTE: The gif encoder plays back gifs a little to fast.
-        //      Added a '2.75' modifier to slow it down [DC]
-        encoder.setDelay((1000 / settings.fps) * 2.75);
+        //      Added a '2.60' modifier to slow it down [DC]
+        encoder.setDelay((1000 / settings.fps) * 2.60);
         encoder.start();
     }
 
@@ -88,7 +90,23 @@ function captureNextFrame() {
         currentFrame = 0;
         imageCount = 0;
         encoder.finish();
-        encoder.download("download.gif");
+
+        let downloadPath = dialog.showSaveDialog({ defaultPath: "download.gif", filters: [{ name: 'Gif', extensions: ['gif'] }] });
+        let gifBuffer = new Buffer(new Uint8Array(encoder.stream().bin));
+
+        console.log("Path: ", downloadPath);
+        if (downloadPath) {
+
+            // Add the gif extension if needed
+            if (downloadPath.endsWith(".gif") !== true) {
+                downloadPath += ".gif";
+            }
+
+            // Write Gif to disk
+            fs.writeFile(downloadPath, gifBuffer, function (err) {
+                if (err) throw err;
+            });
+        }
         // curWindow.close();
     }
     else {

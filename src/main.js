@@ -28,8 +28,8 @@ app.on('ready', function () {
         #Main Window
     \*-------------------------*/
     mainWindow = new BrowserWindow({
-        // x: 0,
-        // y: 240,
+        x: 0,
+        y: 240,
         width: 900,
         height: 700,
         show: false

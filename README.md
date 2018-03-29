@@ -2,9 +2,28 @@
 
 Create an aimated gif of your webpage responding to different screen widths.
 
-## Installing / Getting started
 
-![Demo](demos/responsiveGif-Demo.gif)
+## Demo
+
+![Demo](demos/demo2.gif)
+
+## Example Output
+
+![Example1](demos/ex1.gif)
+![Example2](demos/ex2.gif)
+
+## Installation
+
+```shell
+git clone https://github.com/davidc4747/responsive-gif
+cd responsive-gif/
+npm install
+npm run pack
+
+# A package of the project will be created inside the "package/" folder
+# An executable file for your operating system fill be inside
+
+```
 
 ## Developing
 

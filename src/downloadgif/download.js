@@ -2,10 +2,8 @@ const { remote, ipcRenderer } = require('electron');
 const BrowserWindow = remote.BrowserWindow;
 let curWindow = remote.getCurrentWindow();
 
-// TODO: disable button while downloading
-// TODO: disable download button if gifWindow is not ready
-
 let tween;
+console.log("download.js");
 
 
 
@@ -51,7 +49,8 @@ function updateSettings(newSettings) {
 }
 
 ipcRenderer.on('settings-changed', function (event, newSettings) {
-    console.log("Settings Changed..download.js");
+    // Update input with new settings values
+    //      NOTE: I'm not sure that I need this... [DC]
     siteUrlElem.value = newSettings.siteUrl;
     durationElem.value = newSettings.duration;
     repeatDelayElem.value = newSettings.repeatDelay;
@@ -87,8 +86,9 @@ ipcRenderer.on('settings-changed', function (event, newSettings) {
 \*======================*/
 
 let isDownloading = false;
-
 let createBtn = document.querySelector('.js-create-btn');
+let cancelBtn = document.querySelector('.js-cancel-btn');
+
 createBtn.addEventListener('click', function () {
     if (!isDownloading) {
         // Request the gif be created
@@ -102,7 +102,16 @@ createBtn.addEventListener('click', function () {
         createBtn.disabled = true;
         createBtn.innerHTML = "Processing (0%)";
         createBtn.classList.add("btn--create--downloading");
+        
+        // Display Cancel button
+        cancelBtn.style.setProperty("visibility", "visible");
     }
+});
+
+cancelBtn.addEventListener('click', function() {
+    // Request the gif be created
+    ipcRenderer.send('cancel-gif');
+    endDownload();
 });
 
 
@@ -116,22 +125,37 @@ ipcRenderer.on('image-captured', function (event, args) {
     if (isDownloading) {
         // if download finished
         if (args.progress >= 1) {
-            // Resume playing the animation
-            tween.play(0);
-
-            // Reset button display
-            isDownloading = false;
-            createBtn.disabled = false;
-            createBtn.innerHTML = "Create Gif";
-            createBtn.classList.remove("btn--create--downloading");
+            endDownload();
         }
         else {
+            // Update Progress bar
+            let progressBar = document.querySelector(".progress");
+            progressBar.style.setProperty('--progress', args.progress);
+
+            // Update createBtn label
             createBtn.innerHTML = `Processing (${(args.progress * 100).toFixed(0)}%)`;
         }
 
     }
-
-    // args = {imgCount, progress}
-    let progressBar = document.querySelector(".progress");
-    progressBar.style.setProperty('--progress', args.progress);
 });
+
+
+
+
+function endDownload() {
+    // Resume playing the animation
+    tween.play(0);
+
+    // Reset button display
+    isDownloading = false;
+    createBtn.disabled = false;
+    createBtn.innerHTML = "Create Gif";
+    createBtn.classList.remove("btn--create--downloading");
+
+    // Hide Cancel button
+    cancelBtn.style.setProperty("visibility", "hidden");
+
+    // Set Progress bar to 0
+    let progressBar = document.querySelector(".progress");
+    progressBar.style.setProperty('--progress', 0);
+}

@@ -2,7 +2,7 @@ const fs = require('fs');
 const { ipcRenderer, remote } = require('electron');
 const { dialog } = remote;
 let curWindow = remote.getCurrentWindow();
-// curWindow.openDevTools();
+curWindow.openDevTools();
 
 
 /*======================*\
@@ -21,6 +21,7 @@ let imageCount = 0;
 let totalFrames;
 let currentFrame = 0;
 let readyToCapture = false;// NOTE: never used [DC]
+console.log("gifwindow.js");
 
 
 
@@ -31,7 +32,6 @@ let readyToCapture = false;// NOTE: never used [DC]
 \*======================*/
 
 ipcRenderer.on('settings-changed', function (event, newSettings) {
-    console.log("Settings Changed..gifwindow.js", newSettings);
     readyToCapture = false;
     settings = newSettings;
 
@@ -66,8 +66,17 @@ ipcRenderer.on('settings-changed', function (event, newSettings) {
     #Creating the gif
 \*======================*/
 
+let wasCanceled = false;
+
 ipcRenderer.on('create-gif', function (event, arg) {
     captureNextFrame();
+});
+
+ipcRenderer.on('cancel-gif', function (event, arg) {
+    // Force cancel the gif creation
+    wasCanceled = true;
+    currentFrame = totalFrames;
+    // captureNextFrame();
 });
 
 
@@ -77,6 +86,7 @@ let encoder = new GIFEncoder();
 encoder.setRepeat(0);
 
 function captureNextFrame() {
+    // if animation just started
     if (currentFrame === 0) {
         tween.pause(0);
         // NOTE: The gif encoder plays back gifs a little to fast.
@@ -85,16 +95,22 @@ function captureNextFrame() {
         encoder.start();
     }
 
+    // if animation is finished
     if (currentFrame >= totalFrames) {
-        // console.log('Animation Complete!!');
+        // Reset animation variables
         currentFrame = 0;
         imageCount = 0;
         encoder.finish();
 
-        let downloadPath = dialog.showSaveDialog({ defaultPath: "download.gif", filters: [{ name: 'Gif', extensions: ['gif'] }] });
-        let gifBuffer = new Buffer(new Uint8Array(encoder.stream().bin));
+        // Skip dialog if 'wasCanceled'
+        let downloadPath, gifBuffer;
+        if (!wasCanceled) {
+            downloadPath = dialog.showSaveDialog({ defaultPath: "download.gif", filters: [{ name: 'Gif', extensions: ['gif'] }] });
+            gifBuffer = new Buffer(new Uint8Array(encoder.stream().bin));
+        }
 
         console.log("Path: ", downloadPath);
+        // if have valid 'downloadPath'
         if (downloadPath) {
 
             // Add the gif extension if needed
@@ -107,6 +123,7 @@ function captureNextFrame() {
                 if (err) throw err;
             });
         }
+        wasCanceled = false;
         // curWindow.close();
     }
     else {
@@ -115,8 +132,6 @@ function captureNextFrame() {
 
         // Screenshot the window
         curWindow.capturePage(function (image) {
-            // console.log('Capture image...');
-
             let imgElem = new Image();
             imgElem.src = image.toDataURL();
 

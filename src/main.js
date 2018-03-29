@@ -42,7 +42,7 @@ app.on('ready', function () {
     mainWindow.loadURL(`file://${__dirname}/downloadgif/download.html`);
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
 
     mainWindow.once('ready-to-show', function () {
         mainWindow.show();
@@ -115,6 +115,10 @@ ipcMain.on("update-settings", function (event, newSettings) {
 
 ipcMain.on('create-gif', function () {
     gifWindow.webContents.send('create-gif');
+});
+
+ipcMain.on('cancel-gif', function () {
+    gifWindow.webContents.send('cancel-gif');
 });
 
 ipcMain.on('image-captured', function (e, args) {

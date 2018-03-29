@@ -36,14 +36,17 @@ ul {
 .btn {
     padding: 0.3rem 0.6rem;
     border: none;
+
+    color: white;
+    background-color: rgb(109, 109, 109);
     
-    color: #000;
-    background-color: #fff;    
+    border-radius: 3px;
+    font-size: 1.2rem;  
 }
 
 .btn:hover {
     cursor: pointer;
-    background-color: #c8c8c8;
+    background-color: rgb(75, 75, 75);
 }
 
 
@@ -79,15 +82,11 @@ ul {
     border-radius: 3px;
 }
 
-
 .btn--create {
     margin: 0.5rem 0.8rem;
 
     color: black;
     background-color: #007ACC;
-    
-    border-radius: 3px;
-    font-size: 1.2rem;
 }
 
 .btn--create:hover {
@@ -99,6 +98,11 @@ ul {
     cursor: wait;
     color: rgb(54, 54, 54);
     background-color: #007ACC;
+}
+
+.btn--cancel {
+    visibility: hidden;
+    margin: 0.2rem 0.8rem;
 }
 
 

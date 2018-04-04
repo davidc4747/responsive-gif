@@ -1,4 +1,4 @@
-# Responsive Gif &middot; [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/davidc4747) [![GitHub last commit](https://img.shields.io/github/last-commit/davidc4747/responsive-gif.svg)]() [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/davidc4747/responsive-gif/pulls)
+# Responsive Gif &middot; [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/davidc4747) [![GitHub last commit](https://img.shields.io/github/last-commit/davidc4747/responsive-gif.svg)](https://github.com/davidc4747/responsive-gif) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/davidc4747/responsive-gif/pulls)
 
 
 Creates a gif that lets you show off or analyze your responsive design.

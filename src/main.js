@@ -1,3 +1,4 @@
+// const test = require('../libs/minified/TweenMax.min.js');
 const { app, BrowserWindow, ipcMain } = require('electron');
 
 /*======================*\
@@ -10,8 +11,8 @@ app.on('ready', function () {
         #Gif Window
     \*-------------------------*/
     gifWindow = new BrowserWindow({
-        width: 1600,
-        height: 900,
+        // width: 1600,
+        // height: 900,
         show: false,
     });
 
@@ -34,7 +35,7 @@ app.on('ready', function () {
         // x: 16,
         // y: 240,
         width: 1150,
-        height: 600,
+        height: 650,
         show: false
     });
 
@@ -79,11 +80,17 @@ app.on('ready', function () {
     #Manage Settings
 \*======================*/
 
+const ANIMATION_SCALE = 2;// Take gif images at a higher resolution to increase image quality [DC]
 let settings = {
-    canvas: {
-        width: 800,
-        height: 450
-    },
+    tween: null,
+    
+    canvasWidth: 800,
+    canvasHeight: 450,
+    
+    animationScale: ANIMATION_SCALE,
+    animationStartWidth: 160,
+    animationEndWidth: 800,
+
     siteUrl: 'http://davidchung.net',
     fps: 45,
     totalFrames: 80,//(settings.duration + settings.repeatDelay) / 1000 * settings.fps,

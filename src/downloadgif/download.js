@@ -5,38 +5,73 @@ let curWindow = remote.getCurrentWindow();
 let tween;
 console.log("download.js");
 
+//TODO: link new inputs to 'updateSettings'
+//TODO: 'settings-changed' event should only be called once at the when project starts
+//TODO: tween is set in 2 windows
+
 
 
 /*======================*\
     #Settings Events
 \*======================*/
 
-let siteUrlElem = document.querySelector(".site-url");
-let durationElem = document.querySelector(".duration");
-let repeatDelayElem = document.querySelector(".repeat-delay");
-let easingElem = document.querySelector(".easing");
-let backgroundColorInput = document.querySelector('.background-color');
+let siteUrlElem = document.querySelector(".js-site-url");
+let durationElem = document.querySelector(".js-duration");
+let repeatDelayElem = document.querySelector(".js-repeat-delay");
+let easingElem = document.querySelector(".js-easing");
+let backgroundColorInput = document.querySelector('.js-background-color');
+
+let startWidthInput = document.querySelector('.js-start-width');
+let endWidthInput = document.querySelector('.js-end-width');
+let containerWidthInput = document.querySelector('.js-container-width');
+let containerHeightInput = document.querySelector('.js-container-height');
 
 
-siteUrlElem.addEventListener("input", function (event) {
-    updateSettings({ siteUrl: siteUrlElem.value });
+
+let settingsInputs = document.querySelectorAll('.js-setting-input');
+for (input of settingsInputs) {
+    input.addEventListener("input", function (event) {
+        updateSettings({ [event.target.name]: event.target.value });
 });
+}
 
-durationElem.addEventListener("input", function (event) {
-    updateSettings({ duration: +event.target.value });
-});
 
-repeatDelayElem.addEventListener("input", function (event) {
-    updateSettings({ repeatDelay: +event.target.value });
-});
+// siteUrlElem.addEventListener("input", function (event) {
+//     updateSettings({ siteUrl: siteUrlElem.value });
+// });
 
-easingElem.addEventListener("input", function (event) {
-    updateSettings({ easing: event.target.value });
-});
+// durationElem.addEventListener("input", function (event) {
+//     updateSettings({ duration: +event.target.value });
+// });
 
-backgroundColorInput.addEventListener("input", function (event) {
-    updateSettings({ backgroundColor: event.target.value });
-});
+// repeatDelayElem.addEventListener("input", function (event) {
+//     updateSettings({ repeatDelay: +event.target.value });
+// });
+
+// easingElem.addEventListener("input", function (event) {
+//     updateSettings({ easing: event.target.value });
+// });
+
+// backgroundColorInput.addEventListener("input", function (event) {
+//     updateSettings({ backgroundColor: event.target.value });
+// });
+
+// // Advanced Settings
+// startWidthInput.addEventListener("input", function (event) {
+//     updateSettings({ backgroundColor: event.target.value });
+// });
+
+// endWidthInput.addEventListener("input", function (event) {
+//     updateSettings({ backgroundColor: event.target.value });
+// });
+
+// containerWidthInput.addEventListener("input", function (event) {
+//     updateSettings({ backgroundColor: event.target.value });
+// });
+
+// containerHeightInput.addEventListener("input", function (event) {
+//     updateSettings({ backgroundColor: event.target.value });
+// });
 
 
 let timeout = null;
@@ -57,18 +92,29 @@ ipcRenderer.on('settings-changed', function (event, newSettings) {
     easingElem.value = newSettings.easing;
     backgroundColorInput.value = newSettings.backgroundColor;
 
+    // Advanced Settings
+    startWidthInput.value = newSettings.animationStartWidth;
+    endWidthInput.value = newSettings.animationEndWidth;
+    containerWidthInput.value = newSettings.canvasWidth;
+    containerHeightInput.value = newSettings.canvasHeight;
+
 
 
     // SetUp preview
     let previewContainer = document.querySelector(".preview__container");
     let previewFrame = document.querySelector(".preview__frame");
-    previewContainer.style.backgroundColor = newSettings.backgroundColor;
+    previewContainer.style.setProperty("width", +newSettings.canvasWidth + "px");
+    previewContainer.style.setProperty("height", +newSettings.canvasHeight + "px");
+    previewContainer.style.setProperty("background-color", newSettings.backgroundColor);
     previewFrame.src = newSettings.siteUrl;
+
+    // TODO: this tween is repeated in here and gifWindow. It should be a ...computed setting? [DC]
+    // Update Animation
     tween = TweenMax.fromTo(previewFrame, newSettings.duration / 1000, {
-        width: 320
+        width: newSettings.animationStartWidth * newSettings.animationScale
     },
         {
-            width: 1600,
+            width: newSettings.animationEndWidth * newSettings.animationScale,
             yoyo: true,
             repeat: -1,
             repeatDelay: newSettings.repeatDelay / 1000,
@@ -108,7 +154,7 @@ createBtn.addEventListener('click', function () {
     }
 });
 
-cancelBtn.addEventListener('click', function() {
+cancelBtn.addEventListener('click', function () {
     // Request the gif be created
     ipcRenderer.send('cancel-gif');
     endDownload();

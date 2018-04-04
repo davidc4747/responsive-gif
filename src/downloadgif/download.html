@@ -14,29 +14,52 @@
 
         <aside class="settings">
             <div class="settings__group">
-                <label class="settings__lbl site-url-label" for="site-url">Site Url: </label>
-                <input class="settings__input site-url" name="site-url" type="text" value="" />
+                <label class="settings__lbl">Site Url: </label>
+                <input name="siteUrl" class="settings__input js-setting-input js-site-url" type="text" />
             </div>
             
             <div class="settings__group">
-                <label class="settings__lbl" for="">Duration(ms): </label>
-                <input class="settings__input duration" name="" type="text" placeholder="Duration" value="">
+                <label class="settings__lbl">Duration(ms): </label>
+                <input name="duration" class="settings__input js-setting-input js-duration" type="text">
             </div>
 
             <div class="settings__group">
-                <label class="settings__lbl" for="">Repeat Delay(ms): </label>
-                <input class="settings__input repeat-delay" name="" type="text" placeholder="Repeat Delay" value="">
+                <label class="settings__lbl">Repeat Delay(ms): </label>
+                <input name="repeatDelay" class="settings__input js-setting-input js-repeat-delay" type="text">
             </div>
 
             <div class="settings__group">
-                <label class="settings__lbl" for="">Easing: </label>
-                <input class="settings__input easing" name="" type="text" placeholder="Easing" value="">
+                <label class="settings__lbl">Easing: </label>
+                <input name="easing" class="settings__input js-setting-input js-easing" type="text">
             </div>
 
             <div class="settings__group">
-                <label class="settings__lbl" for="">Background Color: </label>
-                <input class="settings__input background-color" name="" type="text" placeholder="BackGround Color" value="">
+                <label class="settings__lbl">Background Color: </label>
+                <input name="backgroundColor" class="settings__input js-setting-input js-background-color" type="text">
             </div>
+
+            <section class="advanced-settings">
+                <div class="settings__group">
+                    <label class="settings__lbl">Animation Start Width: </label>
+                    <input name="animationStartWidth" class="settings__input js-setting-input js-start-width" type="text">
+                </div>
+
+                <div class="settings__group">
+                    <label class="settings__lbl">Animation End Width: </label>
+                    <input name="animationEndWidth" class="settings__input js-setting-input js-end-width" type="text">
+                </div>
+
+                <div class="settings__group">
+                    <label class="settings__lbl">Container Width: </label>
+                    <input name="canvasWidth" class="settings__input js-setting-input js-container-width" type="text">
+                </div>
+
+                <div class="settings__group">
+                    <label class="settings__lbl">Container Height: </label>
+                    <input name="canvasHeight" class="settings__input js-setting-input js-container-height" type="text">
+                </div>
+
+            </section>
 
             <button class="btn btn--create js-create-btn">Create Gif</button>
             <button class="btn btn--cancel js-cancel-btn">Cancel</button>

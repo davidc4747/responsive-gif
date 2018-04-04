@@ -36,24 +36,26 @@ ipcRenderer.on('settings-changed', function (event, newSettings) {
 
     // Update window
     totalFrames = newSettings.totalFrames;
-    canvas.width = newSettings.canvas.width;
-    canvas.height = newSettings.canvas.height;
+    curWindow.setSize(newSettings.canvasWidth * newSettings.animationScale, newSettings.canvasHeight * newSettings.animationScale);
+    canvas.width = newSettings.canvasWidth;
+    canvas.height = newSettings.canvasHeight;
     siteFrame.src = newSettings.siteUrl;
     siteFrame.addEventListener("load", function () {
         setTimeout(function () { readyToCapture = true; }, 1000);// Delay by one second to allow the page to load it's contents [DC]
     });
 
+    // TODO: this tween is repeated in here and 'downloadgif' window. It should be a ...computed setting? [DC]
     // Update Animation
     tween = TweenMax.fromTo(siteFrame, newSettings.duration / 1000, {
-        width: 320
+        width: newSettings.animationStartWidth * newSettings.animationScale
     },
         {
-            width: 1600,
+            width: newSettings.animationEndWidth * newSettings.animationScale,
             yoyo: true,
             repeat: -1,
             repeatDelay: newSettings.repeatDelay / 1000,
             ease: EaseLookup.find(newSettings.easing),
-            paused: true
+            // paused: true
         });
 });
 
@@ -91,6 +93,7 @@ function captureNextFrame() {
         // NOTE: The gif encoder plays back gifs a little to fast.
         //      Added a '2.60' modifier to slow it down [DC]
         encoder.setDelay((1000 / settings.fps) * 2.60);
+        encoder.setSize(settings.canvasWidth, settings.canvasHeight);
         encoder.start();
     }
 

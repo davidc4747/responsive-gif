@@ -82,6 +82,21 @@ ul {
     border-radius: 3px;
 }
 
+.advanced-settings {
+    padding: 0.2rem 0;
+    margin: 0.2rem 0;
+    display: none;
+    background-color: #adadad;
+}
+.show-more {
+    margin: 0.2rem 0;
+    color: #007ACC;
+    font-size: 0.9rem;
+    text-decoration: none;
+    text-align: center;
+}
+
+
 .btn--create {
     margin: 0.5rem 0.8rem;
 

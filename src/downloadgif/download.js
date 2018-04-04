@@ -102,9 +102,11 @@ ipcRenderer.on('settings-changed', function (event, newSettings) {
     #Window Events
 \*======================*/
 
+let showAdvancedSettings = false;
 let isDownloading = false;
 let createBtn = document.querySelector('.js-create-btn');
 let cancelBtn = document.querySelector('.js-cancel-btn');
+let showmoreBtn = document.querySelector('.js-showmore');
 
 createBtn.addEventListener('click', function () {
     if (!isDownloading) {
@@ -129,6 +131,13 @@ cancelBtn.addEventListener('click', function () {
     // Request the gif be created
     ipcRenderer.send('cancel-gif');
     endDownload();
+});
+
+showmoreBtn.addEventListener('click', function () {
+    showAdvancedSettings = !showAdvancedSettings;
+    let advancedElem = document.querySelector('.js-advanced-settings');
+    advancedElem.style.setProperty("display", showAdvancedSettings ? "block" : "none");
+    showmoreBtn.innerHTML = !showAdvancedSettings ? "- More Settings -" : "- Less Settings -";
 });
 
 

@@ -17,14 +17,14 @@ app.on('ready', function () {
     });
 
     // Hide Menu
-    // gifWindow.setMenu(null);
+    gifWindow.setMenu(null);
 
     // Load page
     // TODO: open the other window using 'puppeteer' or 'phantomjs' [DC]
     gifWindow.loadURL(`file://${__dirname}/gifWindow/gifwindow.html`);
 
     // Open the DevTools.
-    gifWindow.webContents.openDevTools();
+    // gifWindow.webContents.openDevTools();
 
 
 
@@ -59,6 +59,7 @@ app.on('ready', function () {
     \*-------------------------*/
 
     mainWindow.webContents.on('did-finish-load', function () {
+        mainWindow.webContents.send("init-settings", settings);
         mainWindow.webContents.send("settings-changed", settings);
     });
 

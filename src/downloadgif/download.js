@@ -5,8 +5,10 @@ let curWindow = remote.getCurrentWindow();
 let tween;
 console.log("download.js");
 
-//TODO: 'settings-changed' event should only be called once at the when project starts
 //TODO: add 'show more' buttom for advanced settings
+//TODO: Introduce React.
+//TODO: Create & use gifWindow Only while recording the gif.
+//TODO: Eats up a CRAZY amount of RAM if used multiple times without closing.
 //TODO: tween is set in 2 windows
 
 
@@ -21,6 +23,7 @@ let repeatDelayElem = document.querySelector(".js-repeat-delay");
 let easingElem = document.querySelector(".js-easing");
 let backgroundColorInput = document.querySelector('.js-background-color');
 
+let scrollTopInput = document.querySelector('.js-scroll-top');
 let startWidthInput = document.querySelector('.js-start-width');
 let endWidthInput = document.querySelector('.js-end-width');
 let containerWidthInput = document.querySelector('.js-container-width');
@@ -44,7 +47,9 @@ function updateSettings(newSettings) {
     }, 400);
 }
 
-ipcRenderer.on('settings-changed', function (event, newSettings) {
+
+
+ipcRenderer.on('init-settings', function (event, newSettings) {
     // Update input with new settings values
     //      NOTE: I'm not sure that I need this... [DC]
     siteUrlElem.value = newSettings.siteUrl;
@@ -54,14 +59,15 @@ ipcRenderer.on('settings-changed', function (event, newSettings) {
     backgroundColorInput.value = newSettings.backgroundColor;
 
     // Advanced Settings
+    scrollTopInput.value = newSettings.scrollTop;
     startWidthInput.value = newSettings.animationStartWidth;
     endWidthInput.value = newSettings.animationEndWidth;
     containerWidthInput.value = newSettings.canvasWidth;
     containerHeightInput.value = newSettings.canvasHeight;
+});
 
-
-
-    // SetUp preview
+ipcRenderer.on('settings-changed', function (event, newSettings) {
+    // Update preview
     let previewContainer = document.querySelector(".preview__container");
     let previewFrame = document.querySelector(".preview__frame");
     previewContainer.style.setProperty("width", +newSettings.canvasWidth + "px");

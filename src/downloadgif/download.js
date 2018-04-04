@@ -5,7 +5,6 @@ let curWindow = remote.getCurrentWindow();
 let tween;
 console.log("download.js");
 
-//TODO: add 'show more' buttom for advanced settings
 //TODO: Introduce React.
 //TODO: Create & use gifWindow Only while recording the gif.
 //TODO: Eats up a CRAZY amount of RAM if used multiple times without closing.

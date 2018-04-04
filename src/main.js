@@ -1,5 +1,5 @@
 // const test = require('../libs/minified/TweenMax.min.js');
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 
 /*======================*\
     #Start App
@@ -35,7 +35,7 @@ app.on('ready', function () {
         // x: 16,
         // y: 240,
         width: 1150,
-        height: 650,
+        height: 670,
         show: false
     });
 
@@ -71,6 +71,28 @@ app.on('ready', function () {
     /* Close the app */
     mainWindow.on('closed', () => { app.quit() });
     gifWindow.on('closed', () => { app.quit() });
+
+    /* Shortcuts for Mac */
+    let template = [{
+        label: "Application",
+        submenu: [
+            { label: "Quit", accelerator: "Command+Q", click: function () { app.quit(); } }
+        ]
+    }, {
+        label: "Edit",
+        submenu: [
+            { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+            { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+            { type: "separator" },
+            { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+            { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+            { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+            { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+        ]
+    }
+    ];
+
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 });
 
 
@@ -85,10 +107,10 @@ const ANIMATION_SCALE = 2;// Take gif images at a higher resolution to increase 
 let settings = {
     tween: null,
     scrollTop: 0,
-    
+
     canvasWidth: 800,
     canvasHeight: 450,
-    
+
     animationScale: ANIMATION_SCALE,
     animationStartWidth: 160,
     animationEndWidth: 800,

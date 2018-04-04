@@ -41,6 +41,7 @@ ipcRenderer.on('settings-changed', function (event, newSettings) {
     canvas.height = newSettings.canvasHeight;
     siteFrame.src = newSettings.siteUrl;
     siteFrame.addEventListener("load", function () {
+        siteFrame.contentWindow.scrollTo(0, +newSettings.scrollTop);
         setTimeout(function () { readyToCapture = true; }, 1000);// Delay by one second to allow the page to load it's contents [DC]
     });
 

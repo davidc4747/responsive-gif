@@ -5,8 +5,8 @@ let curWindow = remote.getCurrentWindow();
 let tween;
 console.log("download.js");
 
-//TODO: link new inputs to 'updateSettings'
 //TODO: 'settings-changed' event should only be called once at the when project starts
+//TODO: add 'show more' buttom for advanced settings
 //TODO: tween is set in 2 windows
 
 
@@ -32,47 +32,8 @@ let settingsInputs = document.querySelectorAll('.js-setting-input');
 for (input of settingsInputs) {
     input.addEventListener("input", function (event) {
         updateSettings({ [event.target.name]: event.target.value });
-});
+    });
 }
-
-
-// siteUrlElem.addEventListener("input", function (event) {
-//     updateSettings({ siteUrl: siteUrlElem.value });
-// });
-
-// durationElem.addEventListener("input", function (event) {
-//     updateSettings({ duration: +event.target.value });
-// });
-
-// repeatDelayElem.addEventListener("input", function (event) {
-//     updateSettings({ repeatDelay: +event.target.value });
-// });
-
-// easingElem.addEventListener("input", function (event) {
-//     updateSettings({ easing: event.target.value });
-// });
-
-// backgroundColorInput.addEventListener("input", function (event) {
-//     updateSettings({ backgroundColor: event.target.value });
-// });
-
-// // Advanced Settings
-// startWidthInput.addEventListener("input", function (event) {
-//     updateSettings({ backgroundColor: event.target.value });
-// });
-
-// endWidthInput.addEventListener("input", function (event) {
-//     updateSettings({ backgroundColor: event.target.value });
-// });
-
-// containerWidthInput.addEventListener("input", function (event) {
-//     updateSettings({ backgroundColor: event.target.value });
-// });
-
-// containerHeightInput.addEventListener("input", function (event) {
-//     updateSettings({ backgroundColor: event.target.value });
-// });
-
 
 let timeout = null;
 function updateSettings(newSettings) {
@@ -107,6 +68,10 @@ ipcRenderer.on('settings-changed', function (event, newSettings) {
     previewContainer.style.setProperty("height", +newSettings.canvasHeight + "px");
     previewContainer.style.setProperty("background-color", newSettings.backgroundColor);
     previewFrame.src = newSettings.siteUrl;
+    previewFrame.onload = function () {
+        // Set scrolTop
+        previewFrame.contentWindow.scrollTo(0, +newSettings.scrollTop);
+    };
 
     // TODO: this tween is repeated in here and gifWindow. It should be a ...computed setting? [DC]
     // Update Animation
@@ -148,7 +113,7 @@ createBtn.addEventListener('click', function () {
         createBtn.disabled = true;
         createBtn.innerHTML = "Processing (0%)";
         createBtn.classList.add("btn--create--downloading");
-        
+
         // Display Cancel button
         cancelBtn.style.setProperty("visibility", "visible");
     }

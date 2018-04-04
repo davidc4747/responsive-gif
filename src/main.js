@@ -17,14 +17,14 @@ app.on('ready', function () {
     });
 
     // Hide Menu
-    gifWindow.setMenu(null);
+    // gifWindow.setMenu(null);
 
     // Load page
     // TODO: open the other window using 'puppeteer' or 'phantomjs' [DC]
     gifWindow.loadURL(`file://${__dirname}/gifWindow/gifwindow.html`);
 
     // Open the DevTools.
-    // gifWindow.webContents.openDevTools();
+    gifWindow.webContents.openDevTools();
 
 
 
@@ -83,6 +83,7 @@ app.on('ready', function () {
 const ANIMATION_SCALE = 2;// Take gif images at a higher resolution to increase image quality [DC]
 let settings = {
     tween: null,
+    scrollTop: 0,
     
     canvasWidth: 800,
     canvasHeight: 450,

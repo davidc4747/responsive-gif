@@ -1,6 +1,6 @@
 # Responsive Gif
 
-Create an aimated gif of your webpage responding to different screen widths.
+Creates a gif that lets you show off or analyze your responsive design.
 
 
 ## Demo

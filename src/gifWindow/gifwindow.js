@@ -1,3 +1,6 @@
+let execFile = require('child_process').execFile;
+let gifsicle = require('gifsicle');
+
 const fs = require('fs');
 const { ipcRenderer, remote } = require('electron');
 const { dialog } = remote;
@@ -124,6 +127,11 @@ function captureNextFrame() {
             // Write Gif to disk
             fs.writeFile(downloadPath, gifBuffer, function (err) {
                 if (err) throw err;
+                
+                execFile(gifsicle, ['-O3', downloadPath, '-o', downloadPath], function(error) {
+                    if (error) throw error;
+                    console.log('Gif optimized!');
+                });
             });
         }
         wasCanceled = false;

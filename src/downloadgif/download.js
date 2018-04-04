@@ -5,6 +5,8 @@ let curWindow = remote.getCurrentWindow();
 let tween;
 console.log("download.js");
 
+
+//TODO: add a donate button and other badges to the README
 //TODO: Introduce React.
 //TODO: Create & use gifWindow Only while recording the gif.
 //TODO: Eats up a CRAZY amount of RAM if used multiple times without closing.

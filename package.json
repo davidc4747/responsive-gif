@@ -1,7 +1,7 @@
 {
     "name": "responsive-gif",
     "version": "1.0.0",
-    "description": "",
+    "description": "Creates a gif that lets you show off or analyze your responsive design",
     "main": "src/main.js",
     "scripts": {
         "start": "electron .",
@@ -13,5 +13,8 @@
     "devDependencies": {
         "electron": "^1.8.2",
         "electron-packager": "^11.2.0"
+    },
+    "dependencies": {
+        "gifsicle": "^3.0.4"
     }
 }
